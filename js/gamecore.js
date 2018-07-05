@@ -7,7 +7,7 @@ for (var i = 0; i < 10; i++) {
 var GameStates = {"IDLE":0, "PLAYING":1, "ENDED":2, "BUSY":3}
 
 /**
-* Clear the matrix content
+* Clear the game matrix content
 */
 function clearMatrix() {
 	for(var i = 0; i < 10; i++) {
@@ -18,6 +18,18 @@ function clearMatrix() {
 	}
 }
 
+/**
+* Clear the preview matrix content
+*/
+function clearPreviewMatrix() {
+	for(var i = 0; i < 4; i++) {
+		for(var j = 0; j < 4; j++) {
+			nextPiece.paintSquare(i,j,getShapeColor(null));
+		}
+	}
+}
+
+var nextShape = null;
 var currentShape = null;
 /**
 * generate and spawn a random shape
@@ -30,8 +42,9 @@ function initializeShape() {
 	}
 
 	_checkForCompleteRows();
-
-	var shapeCoordinates = getRandomShape();
+	generateNextAndCurrentShape();
+	_updateNextPieceMatrixWithShape(getShapeCoordinates(nextShape), 0, 0, nextShape);
+	var shapeCoordinates = getShapeCoordinates(currentShape);
 	shapeCoordinates.forEach(function(coord) {
 		coord[0] += 3;
 	});
@@ -76,7 +89,7 @@ function _horizontalShiftShape(shapeCoordinates, shift) {
 	if(res == 1) {
 		_updateMatrixWithShape(shapeCoordinates, shift, 0, currentShape);		
 		for(var i = 0; i < shapeCoordinates.length; i++)
-			shapeCoordinates[i] = [shapeCoordinates[i][0]+shift,shapeCoordinates[i][1]];
+			shapeCoordinates[i] = [shapeCoordinates[i][0]+shift, shapeCoordinates[i][1]];
 		
 		return true;
 	}
@@ -119,6 +132,20 @@ function _updateMatrixWithShape(shapeCoordinates, shiftX, shiftY, shapeType) {
 		vMatrix.paintSquare(shapeCoordinates[i][0]+shiftX, shapeCoordinates[i][1]+shiftY, getShapeColor(shapeType));
 	}
 	//updateUI();	
+}
+
+/**
+ * Draw next incoming piece to the small matrix (piece preview)
+ * @param {*} shapeCoordinates 
+ * @param {*} shiftX 
+ * @param {*} shiftY 
+ * @param {*} shapeType 
+ */
+function _updateNextPieceMatrixWithShape(shapeCoordinates, shiftX, shiftY, shapeType) {
+	clearPreviewMatrix();
+	for(var i = 0; i < shapeCoordinates.length; i++) {
+		nextPiece.paintSquare(shapeCoordinates[i][0]+shiftX, shapeCoordinates[i][1]+shiftY+1, getShapeColor(shapeType));
+	}
 }
 
 function _updateMatrixSubstituteShape(oldShape, newShape, shapeType) {
@@ -265,14 +292,6 @@ function _checkForCompleteRows() {
 }
 
 function _moveEverythingAboveDownByOne(row) {
-	/*for(var i = row; i > 0; i--) {
-		for(var j = 0; j < gameMatrix.length; j++) {
-			gameMatrix[j][i] = gameMatrix[j][i-1];
-			//game
-		}
-	}*/
-
-	
 	for(var i = row; i > 0; i--) {
 		for(var j = 0; j < gameMatrix.length; j++) {
 			gameMatrix[j][i] = gameMatrix[j][i-1];
@@ -313,4 +332,11 @@ function endingPhase() {
 	}
 }
 
-newGame();
+function waitForSpritesReady() {
+	if(currentSpriteLoaded >= imageCount) {
+		newGame();
+		clearInterval(this);
+	}
+}
+
+setInterval(waitForSpritesReady, 10);

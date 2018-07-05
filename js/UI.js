@@ -1,10 +1,14 @@
 var canvas = document.getElementById("gameArea");
-var ctx = canvas.getContext('2d');
-var vMatrix = new VisualMatrix("gameArea",40,1,22,10);
+ctx = canvas.getContext("2d");
+ctx.fillStyle = "#000000";
+ctx.fillRect(0,0,10000,10000);
+
+var vMatrix = new VisualMatrix("gameArea",40,1,22,10,0,0,5);
+var nextPiece = new VisualMatrix("gameArea",40,1,4,4,470,650,0);
 
 function greyOutRow(row) {
 	for(var i = 0; i < 10; i++)
-		vMatrix.paintSquare(i,row,"#818181");
+		vMatrix.paintSquare(i,row,"#a1a1a1");
 }
 
 /**
@@ -15,41 +19,35 @@ function greyOutRow(row) {
  * @param spaceSize
  * @constructor
  */
-function VisualMatrix(canvasId, squareSize, spaceSize, rows, columns) {
+function VisualMatrix(canvasId, squareSize, spaceSize, rows, columns, offsetX, offsetY, matrixBorder) {
     this.canvas = $("#"+canvasId);
     this.ctx=this.canvas[0].getContext("2d");
 
     this.squareSize = squareSize;
     this.spaceSize = spaceSize;
-    this.totalCellSize = squareSize + spaceSize;
+	this.totalCellSize = squareSize + spaceSize;
+	this.offsetX = offsetX;
+	this.offsetY = offsetY;
+	this.matrixBorder = matrixBorder;
 
- 	var wH,wW;
-    if(rows) {
-		wH = this.totalCellSize * rows;
-    } else {
-    	wH = $(window).height();
-    }
+    this.maxX = Math.ceil(this.totalCellSize * columns)+offsetX;
+	this.maxY = Math.ceil(this.totalCellSize * rows)+offsetY;
+	
+	ctx.fillStyle = "#d1d1d1";
+	ctx.fillRect(offsetX,offsetY,this.maxX+this.matrixBorder*2-offsetX, this.maxY+this.matrixBorder*2-offsetY);
+	ctx.fillStyle = "#000000";
+	ctx.fillRect(offsetX+this.matrixBorder,offsetY+this.matrixBorder,this.maxX-offsetX, this.maxY-offsetY);
 
-    if(columns) {
-		wW = this.totalCellSize * columns;
-    } else {
-    	wW = $(window).width();
-    }
+	this.squares = [];
 
-    this.ctx.canvas.width = wW;
-    this.ctx.canvas.height = wH;
-
-    this.maxX = Math.ceil(wW / this.totalCellSize);
-    this.maxY = Math.ceil(wH / this.totalCellSize);
-
-    this.squares = [];
-
-    //initialize
-    for (var i = 0; i < this.maxX; i++) {
+	//initialize
+	var idx = 0;
+    for (var i = 0; i < columns; i++) {
         this.squares.push([]);
-        for (var j = 0; j < this.maxY; j++) {
-            this.squares[i].push(new VisualSquare(i, j, this.squareSize, this.spaceSize, "#d1d1d1",this.ctx));
-        }
+        for (var j = 0; j < rows; j++) {
+            this.squares[idx].push(new VisualSquare(i, j, this.squareSize, this.spaceSize, "#000000",this.ctx, this.matrixBorder, this.offsetX, this.offsetY));
+		}
+		idx++;
     }
 }
 
@@ -58,13 +56,21 @@ VisualMatrix.prototype.getSquare = function(x, y) {
         return this.squares[x][y];
     return null;
 };
-
+/**
+ * paint the given square with the required color
+ * @param {matrix coordinate x} x 
+ * @param {matrix coordinate y} y 
+ * @param {square color} color 
+ */
 VisualMatrix.prototype.paintSquare = function(x, y, color) {
     if(this.squares[x])
         this.squares[x][y].paint(color);
 };
 
-
+/**
+ * set the context color
+ * @param {conext color} color 
+ */
 VisualMatrix.prototype.setContextColor = function(color) {
     this.ctx.fillStyle = color;
 };
@@ -80,7 +86,7 @@ VisualMatrix.prototype.setContextColor = function(color) {
  * @param ctx
  * @constructor
  */
-function VisualSquare(x, y, squareSize, spaceSize, baseColor, ctx) {
+function VisualSquare(x, y, squareSize, spaceSize, baseColor, ctx, matrixBorder, offsetX, offsetY) {
     this.x = x;
     this.y = y;
     this.squareSize = squareSize;
@@ -92,8 +98,11 @@ function VisualSquare(x, y, squareSize, spaceSize, baseColor, ctx) {
     this.paint = function(color) {
 	    if(color) {
 	        this._ctx.fillStyle = color;
-	    }
-	    this._ctx.fillRect(this.x * this.totalCellSize, this.y * this.totalCellSize, this.squareSize, this.squareSize);
+		}
+		if(color != "#000000") {
+			sprites[color].draw(this.x * this.totalCellSize + matrixBorder + offsetX, this.y * this.totalCellSize + matrixBorder + offsetY, this._ctx);
+		} else
+	    	this._ctx.fillRect(this.x * this.totalCellSize + matrixBorder + offsetX, this.y * this.totalCellSize + matrixBorder + offsetY, this.squareSize, this.squareSize);
 	};
 
     this.paint(baseColor);

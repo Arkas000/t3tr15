@@ -5,7 +5,7 @@ function getInitialCoordinates(shape) {
 	//coordinates that build the shape. (4x2 square components)
 	switch(shape) {
 		case Shapes.SQUARE: { // [::]
-			return [[0,1],[0,0],[1,1],[1,0]];
+			return [[1,1],[1,0],[2,1],[2,0]];
 		}
 		case Shapes.L_L: { // [:..]
 			return [[0,1],[1,1],[0,0],[2,1]];
@@ -31,36 +31,47 @@ function getInitialCoordinates(shape) {
 	}
 }
 
-function getRandomShape() {
-	currentShape = Math.floor(Math.random()*7)
-	return getInitialCoordinates(currentShape);
+function generateNextAndCurrentShape() {
+	if(nextShape == null) nextShape = Math.floor(Math.random()*7);
+	currentShape = nextShape;
+	nextShape = Math.floor(Math.random()*7);
+}
+function getShapeCoordinates(shape) {
+	return getInitialCoordinates(shape);
 }
 
 function getShapeColor(shape) {
 	switch(shape) {
 		case Shapes.SQUARE: { // [::]
-			return "#bb2020";
+			//return "#bb2020";
+			return 0;
 		}
 		case Shapes.L_L: { // [:..]
-			return "#20bb20";
+			//return "#20bb20";
+			return 1;
 		}
 		case Shapes.L_R: { // [..:]
-			return "#2020bb";
+			//return "#2020bb";
+			return 2;
 		}
 		case Shapes.TRUNK: { // [....]
-			return "#bbbb20";
+			//return "#bbbb20";
+			return 3;
 		}
 		case Shapes.PYRAMID: { // [.:.]
-			return "#bb20bb";
+			//return "#bb20bb";
+			return 4;
 		}
 		case Shapes.Z_L: { // [':.]
-			return "#20bbbb";
+			//return "#20bbbb";
+			return 5;
 		}
 		case Shapes.Z_R: { // [.:']
-			return "#009070";
+			//return "#009070";
+			return 5;
 		}
 		default: {
-			return "#d1d1d1";
+			return "#000000";
 		}
 	}
 }
