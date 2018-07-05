@@ -16,7 +16,7 @@ function Sprite(img, width, height, positions){
   };
 
 var currentSpriteLoaded = 0;
-var imageCount = 6;
+var imageCount = 8;
 var sprites = [];
 
 var img = new Image();
