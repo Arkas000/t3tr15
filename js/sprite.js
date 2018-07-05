@@ -24,54 +24,57 @@ var img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/nikes.webp';
+img.src = 'img/nikes.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/bottapalle.webp';
+  img.onerror = function() {
+      print("E");
+  }
+img.src = 'img/bottapalle.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/jack.webp';
+img.src = 'img/jack.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/badass.webp';
+img.src = 'img/badass.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/heart.webp';
+img.src = 'img/heart.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/geppe.webp';
+img.src = 'img/geppe.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/gode.webp';
+img.src = 'img/gode.png';
 sprites.push(new Sprite(img, 40, 40, []));
 
 img = new Image();
 img.onload = function() {
 	currentSpriteLoaded++;
   };
-img.src = 'img/omegapiero.webp';
+img.src = 'img/omegapiero.png';
 sprites.push(new Sprite(img, 40, 40, []));
