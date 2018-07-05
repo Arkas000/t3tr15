@@ -8,7 +8,7 @@ var nextPiece = new VisualMatrix("gameArea",40,1,4,4,470,650,0);
 
 function greyOutRow(row) {
 	for(var i = 0; i < 10; i++)
-		vMatrix.paintSquare(i,row,"#a1a1a1");
+		vMatrix.paintSquare(i,row,7);
 }
 
 /**
@@ -100,6 +100,8 @@ function VisualSquare(x, y, squareSize, spaceSize, baseColor, ctx, matrixBorder,
 	        this._ctx.fillStyle = color;
 		}
 		if(color != "#000000") {
+			this._ctx.fillStyle = "#000000";
+			this._ctx.fillRect(this.x * this.totalCellSize + matrixBorder + offsetX, this.y * this.totalCellSize + matrixBorder + offsetY, this.squareSize, this.squareSize);
 			sprites[color].draw(this.x * this.totalCellSize + matrixBorder + offsetX, this.y * this.totalCellSize + matrixBorder + offsetY, this._ctx);
 		} else
 	    	this._ctx.fillRect(this.x * this.totalCellSize + matrixBorder + offsetX, this.y * this.totalCellSize + matrixBorder + offsetY, this.squareSize, this.squareSize);

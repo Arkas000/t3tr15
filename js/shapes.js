@@ -68,7 +68,7 @@ function getShapeColor(shape) {
 		}
 		case Shapes.Z_R: { // [.:']
 			//return "#009070";
-			return 5;
+			return 6;
 		}
 		default: {
 			return "#000000";

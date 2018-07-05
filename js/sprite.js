@@ -61,3 +61,17 @@ img.onload = function() {
   };
 img.src = 'img/geppe.webp';
 sprites.push(new Sprite(img, 40, 40, []));
+
+img = new Image();
+img.onload = function() {
+	currentSpriteLoaded++;
+  };
+img.src = 'img/gode.webp';
+sprites.push(new Sprite(img, 40, 40, []));
+
+img = new Image();
+img.onload = function() {
+	currentSpriteLoaded++;
+  };
+img.src = 'img/omegapiero.webp';
+sprites.push(new Sprite(img, 40, 40, []));
