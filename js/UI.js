@@ -110,6 +110,30 @@ function VisualSquare(x, y, squareSize, spaceSize, baseColor, ctx, matrixBorder,
     this.paint(baseColor);
 }
 
+function updateScoreUI() {
+	ctx.fillStyle = "#000000";
+	ctx.fillRect(450, 50, 300, 200);
+	ctx.font="30px Verdana";
+	ctx.fillStyle = "#ffffff";
+	ctx.fillText("score: " + score,450,110);
+}
+
+function updateLevelUI() {
+	ctx.fillStyle = "#000000";
+	//ctx.fillRect(450, 80, 300, 100);
+	ctx.font="30px Verdana";
+	ctx.fillStyle = "#ffffff";
+	ctx.fillText("lines: " + lines,450,140);
+}
+
+function updateLinesUI() {
+	ctx.fillStyle = "#000000";
+	//ctx.fillRect(450, 110, 300, 100);
+	ctx.font="30px Verdana";
+	ctx.fillStyle = "#ffffff";
+	ctx.fillText("level: " + level,450,170);
+}
+
 
 //CONTROLLER
 
@@ -156,3 +180,4 @@ function tapStart(evt) {
 	evt.preventDefault();
 	speedOn = false;
 }
+

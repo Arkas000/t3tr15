@@ -177,7 +177,8 @@ var skipped = 0;
 var speedOn = false;
 
 function shiftDown() {
-	if(speedOn || skipped % 10 == 0) {
+	var levelCapped = level > 10?10 : level;
+	if((speedOn && skipped % 2 == 0) || skipped % (Math.floor(30/(levelCapped+1)))== 0) {
 		if(currentShapeCoords) {		
 			var res = _verticalShiftShape(currentShapeCoords,1);
 			if(res == -3 || res == 0) {	
@@ -194,7 +195,7 @@ function shiftDown() {
 }
 
 function rotate() {
-	if(gameStatus == GameStates.PLAYING) {
+	if(gameStatus == GameStates.PLAYING && currentShape != Shapes.SQUARE) {
 		var tempBlock = cloneBlock(currentShapeCoords);
 		var origin = currentShapeCoords[1];
 		for (i = 0, length = tempBlock.length; i < length; i++) {
@@ -300,6 +301,8 @@ function _moveEverythingAboveDownByOne(row) {
 		gameMatrix[j-1][i-2] = {"val":0, "shape":null};
 		vMatrix.paintSquare(j,i-1, getShapeColor(null));
 	}
+	increaseLines();
+	increaseScore(20);
 }
 
 function endGame() {
@@ -314,9 +317,10 @@ var gameInterval;
 
 function newGame() {
 	if(gameStatus != GameStates.PLAYING && gameStatus != GameStates.BUSY) {
+		resetData();
 		clearMatrix();
 		gameStatus = GameStates.PLAYING;
-		gameInterval = setInterval(shiftDown, 50);
+		gameInterval = setInterval(shiftDown, 20);
 	}
 }
 
@@ -335,8 +339,8 @@ function endingPhase() {
 function waitForSpritesReady() {
 	if(currentSpriteLoaded >= imageCount) {
 		newGame();
-		clearInterval(this);
+		clearInterval(spriteReadyInterv);
 	}
 }
 
-setInterval(waitForSpritesReady, 10);
+var spriteReadyInterv = setInterval(waitForSpritesReady, 10);
