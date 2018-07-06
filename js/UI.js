@@ -11,6 +11,10 @@ function greyOutRow(row) {
 		vMatrix.paintSquare(i,row,7);
 }
 
+ctx.font="30px Verdana";
+ctx.fillStyle = "#ffffff";
+ctx.fillText("Press ENTER\n to Play",50,200);
+
 /**
  * Visual Matrix constructor.
  * Visual Matrix is an API to use a canvas like a visual matrix
@@ -65,6 +69,11 @@ VisualMatrix.prototype.getSquare = function(x, y) {
 VisualMatrix.prototype.paintSquare = function(x, y, color) {
     if(this.squares[x])
         this.squares[x][y].paint(color);
+};
+
+VisualMatrix.prototype.paintBG = function(color) {
+    ctx.fillStyle = "#000000";
+	ctx.fillRect(this.offsetX+this.matrixBorder,this.offsetY+this.matrixBorder,this.maxX-this.offsetX, this.maxY-this.offsetY);
 };
 
 /**
@@ -146,6 +155,7 @@ document.addEventListener('keydown', (event) => {
 		shiftRight();
 	} else if(keyName == "Enter") {
 		newGame();
+		bgMusic.play();
 	} else if(keyName == " " || keyName == "ArrowUp") {
 		rotate();
 	}

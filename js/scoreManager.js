@@ -57,4 +57,4 @@ function resetData() {
     updateLevelUI();
 }
 
-setInterval(function() { increaseScore(1); },1000);
+//setInterval(function() { increaseScore(1); },1000);

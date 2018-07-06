@@ -16,6 +16,7 @@ function clearMatrix() {
 			vMatrix.paintSquare(i,j,getShapeColor(null));
 		}
 	}
+	vMatrix.paintBG("#000000");
 }
 
 /**
@@ -112,13 +113,13 @@ function _verticalShiftShape(shapeCoordinates, shift) {
 	for(var i = 0; i < shapeCoordinates.length; i++)
 		newCoords[i] = [shapeCoordinates[i][0],shapeCoordinates[i][1] + shift];
 	var res = _checkSpaceAvailability(newCoords);
-	if(res == 1) {
+	if(res == 1) { //no collisions
 		_updateMatrixWithShape(shapeCoordinates, 0, shift, currentShape);		
 		for(var i = 0; i < shapeCoordinates.length; i++)
 			shapeCoordinates[i] = [shapeCoordinates[i][0],shapeCoordinates[i][1]+shift];
 		return res;
 	}
-	return res;
+	return res; //collision detected
 }
 
 //ud
@@ -182,6 +183,7 @@ function shiftDown() {
 		if(currentShapeCoords) {		
 			var res = _verticalShiftShape(currentShapeCoords,1);
 			if(res == -3 || res == 0) {	
+				increaseScore(16+level);
 				currentShapeCoords = initializeShape();
 				if(!currentShapeCoords) {
 					endGame();
@@ -302,7 +304,7 @@ function _moveEverythingAboveDownByOne(row) {
 		vMatrix.paintSquare(j,i-1, getShapeColor(null));
 	}
 	increaseLines();
-	increaseScore(20);
+	increaseScore(100);
 }
 
 function endGame() {
@@ -312,7 +314,7 @@ function endGame() {
 	console.log("Game Over");
 }
 
-var gameStatus = GameStates.IDLE;
+var gameStatus = GameStates.ENDED;
 var gameInterval;
 
 function newGame() {
@@ -338,7 +340,7 @@ function endingPhase() {
 
 function waitForSpritesReady() {
 	if(currentSpriteLoaded >= imageCount) {
-		newGame();
+		//newGame();
 		clearInterval(spriteReadyInterv);
 	}
 }
