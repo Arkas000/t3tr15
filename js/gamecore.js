@@ -183,7 +183,7 @@ function shiftDown() {
 		if(currentShapeCoords) {		
 			var res = _verticalShiftShape(currentShapeCoords,1);
 			if(res == -3 || res == 0) {	
-				increaseScore(16+level);
+				increaseScore(16+level+lines);
 				currentShapeCoords = initializeShape();
 				if(!currentShapeCoords) {
 					endGame();
