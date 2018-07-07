@@ -155,7 +155,7 @@ document.addEventListener('keydown', (event) => {
 		shiftRight();
 	} else if(keyName == "Enter") {
 		newGame();
-		bgMusic.play();
+		bgMusic[bgMusicSelected].play();
 	} else if(keyName == " " || keyName == "ArrowUp") {
 		rotate();
 	}

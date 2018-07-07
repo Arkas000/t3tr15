@@ -6,17 +6,34 @@ function sound(src, loop) {
     this.sound.style.display = "none";
     document.body.appendChild(this.sound);
     if(loop) {
-        this.sound.addEventListener('ended', function() {
+        /*this.sound.addEventListener('ended', function() {
             this.currentTime = 0;
             this.play();
-        }, false);
+        }, false);*/
+        this.sound.loop = true;
     }
     this.play = function(){
         this.sound.play();
     }
     this.stop = function(){
         this.sound.pause();
+        this.sound.see
     }
 }
 
-var bgMusic = new sound("snd/t3tr15.mp3", true);
+var bgMusicSelected = 0;
+
+var bgMusic = [new sound("snd/t3tr15.mp3", true), new sound("snd/t3tr15-remix.mp3", true)];
+
+function setMusic(value) {
+    if(bgMusicSelected != value) {
+        if(bgMusicSelected >=0) {
+            bgMusic[bgMusicSelected].stop();        
+        }
+        bgMusicSelected = value;
+        if(value >= 0) {
+            bgMusic[bgMusicSelected].play();
+            bgMusic[bgMusicSelected].sound.currentTime=0;
+        }
+    }
+}
