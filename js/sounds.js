@@ -37,3 +37,13 @@ function setMusic(value) {
         }
     }
 }
+
+$("#musicABtn").click(function() {
+    setMusic(0);
+})
+$("#musicBBtn").click(function() {
+    setMusic(1);
+})
+$("#noMusicBtn").click(function() {
+    setMusic(-1);
+})
