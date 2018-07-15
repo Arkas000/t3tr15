@@ -1,28 +1,58 @@
 <html>	
 <head>	
 	<title>Tetris</title>
-	<meta name="viewport" content="height=device-height, initial-scale=0.9, maximum-scale=0.9, user-scalable=0"> 
+	<meta name="viewport" content="width=device-width initial-scale=0.58, maximum-scale=1, user-scalable=0"> 
 
 	<script src="js/jquery.min.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 </head>
-<body>
+<body style="background-color:black;">
 	<canvas id="gameArea" width="700" height="910" style="border:1px solid #000000; left: 50%;position: absolute; transform: translateX(-50%);"></canvas>
-
-	<div style="border:1px solid #750707; width:700; height:910; left: 50%;position: absolute; transform: translateX(-50%);">
-		<div style="position:absolute;right:5%;bottom:5%;">
-			<input type="button" id="musicABtn" value="Music A" style="float:left;">
-			<input type="button" id="musicBBtn" value="Music B" style="float:left;">
-			<input type="button" id="noMusicBtn" value="No Music" style="float:left;">
+	<div id="mobile-events" class="gui-overlay mobile-events" hidden="true"></div>
+	<div class="gui-overlay" unselectable="on" onselectstart="return false;" >
+		<div class="global-rank-panel" hidden="true">
+			<input type="button" class="tetris-button" id="close-global-rank" value="X"> 
+			<div id="global-rank-list"></div>
+		</div>
+		<div class="left-panel"></div>
+		<div class="right-panel">
+			<div class="options-panel">
+				<input type="button" class="tetris-button global-rank-button" id="open-global-rank"> 
+				<input type="button" class="tetris-button pause-button" id="pause"> 
+			</div>
+			
+			<div id="submit-record-panel" class="submit-record-panel">
+				<label id="submit-record-label">inserisci il tuo nome per entrare in classifica<br><br>UNA VOLTA SCELTO NON SI PUO' MODIFICARE</label>
+				<input type="text" id="submit-record-name">
+				<input type="button" id="submit-record-btn">
+			</div>
+			<div id="rank-panel" class="rank-panel" hidden="true">
+					<label class="standard-text" id="username">-</label>
+					<div id="rank-list"></div>
+				</div>
+			<div class="music-panel">
+				<input type="button" class="tetris-button music-button-a" id="musicABtn">
+				<input type="button" class="tetris-button music-button-b" id="musicBBtn">
+				<input type="button" class="tetris-button no-music-button" id="noMusicBtn">
+			</div>
+			<div class="credits-panel">
+				Created by <br>ArkasTheDreamer
+			</div>
 		</div>
 	</div>
-	
 
-	<!--<script src="js/sounds.js"></script>
+	</button>
+	
+	<script src="js/saveGame.js"></script>
+	<script src="js/sounds.js"></script>
 	<script	src="js/sprite.js"></script>
 	<script	src="js/scoreManager.js"></script>
 	<script src="js/shapes.js"></script>
+	<script src="js/guideLines.js"></script>
     <script src="js/UI.js"></script>
-	<script src="js/gamecore.js"></script>-->
-	<script src="js/t3tr15.min.js"></script>
+	<script src="js/gamecore.js"></script>
+
+	<!--<script src="js/t3tr15.min.js"></script>-->
 </body>
 </html>

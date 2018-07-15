@@ -16,7 +16,7 @@ function Sprite(img, width, height, positions){
   };
 
 var currentSpriteLoaded = 0;
-var imageCount = 8;
+var imageCount = 9;
 var sprites = [];
 
 var img = new Image();
@@ -77,4 +77,11 @@ img.onload = function() {
 	currentSpriteLoaded++;
   };
 img.src = 'img/omegapiero.png';
+sprites.push(new Sprite(img, 40, 40, []));
+
+img = new Image();
+img.onload = function() {
+	currentSpriteLoaded++;
+  };
+img.src = 'img/ghost.png';
 sprites.push(new Sprite(img, 40, 40, []));
