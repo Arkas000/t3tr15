@@ -1,0 +1,248 @@
+.gui-overlay {
+    border: 1px solid #d1d1d1; 
+    width:700; 
+    height:910; 
+    left: 50%;
+    position: absolute; 
+    transform: translateX(-50%);
+}
+
+.mobile-events {
+    border: 0px solid transparent; 
+    z-index: 4;
+    width: 100%;
+    height: 90%;
+    bottom: 0;
+}
+
+.left-panel {
+    position: absolute;
+    width:calc(100% - 280px);
+    height:100%;
+    left:0;
+}
+
+.right-panel {
+    position: absolute;
+    width:280px;
+    height:100%;
+    right:0;
+}
+
+.music-panel {
+    position:absolute;
+    width:100%;
+    height:10%;
+    bottom:2%;
+}
+
+.tetris-button {
+    border: none;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    margin-left: 30px;
+    background-color: transparent;
+}
+
+.music-button-a {
+    background-image: url("../img/music-1.png");
+}
+
+.music-button-b {
+    background-image: url("../img/music-2.png");
+}
+
+.no-music-button {
+    background-image: url("../img/no-music.png");
+}
+
+.global-rank-button {
+    background-image: url("../img/trophy.png");
+}
+
+.pause-button {
+    background-image: url("../img/pause.png");
+}
+
+.play-button {
+    background-image: url("../img/play8bit.png");
+}
+
+.credits-panel {
+    position:absolute;
+    width:100%;
+    height:5%;
+    bottom:0;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    text-align: center;
+}
+
+.submit-record-panel {
+    font-family: 'Press Start 2P', cursive;
+    position:absolute;
+    top: 40%;
+    left:5%;
+}
+
+#submit-record-label {
+    float:left;
+    color:white;
+    padding-bottom: 15px;
+}
+
+#submit-record-btn {
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    margin-left: 10px;
+    background-color: transparent;
+    background-image: url("../img/play8bit.png");
+    float:left;
+    
+}
+
+#submit-record-name {
+    float:left;
+    font-family: 'Press Start 2P', cursive;
+    width: 222px;
+    height: 30px;
+    color: white;
+    background: black;
+    padding-left: 10px;
+}
+
+.rank-panel {
+    font-family: 'Press Start 2P', cursive;
+    position: absolute;
+    top: 25%;
+    left: 2px;
+    width: calc(100% - 4px);
+}
+
+.standard-text {
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    font-size: 16px;
+}
+
+.small {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.score {
+    right: 0;
+    position: absolute;
+    margin-top: 0;
+}
+
+#username {
+    margin-bottom: 25px;
+    float: left;
+    margin-left: 5px;
+}
+
+.rank-value {
+    height: 55px;
+    float: left;
+    margin-bottom: 15px;
+    width:100%;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+}
+
+.header-rank-value {
+    border-style: solid;
+    border-width: 0px;
+    border-color: black;
+    margin-bottom: 5px;
+    margin-top: -30px;
+}
+
+#global-rank-list {
+    position: absolute;
+    z-index: 2;
+    background: black;
+    height: 100%;
+    width: 100%;
+}
+
+.global-rank-value {
+    height: 32px;
+    float: left;
+    margin-bottom: 5px;
+    width: 70%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+}
+
+.global-small {
+    font-size: 12px;
+    left: 5px;
+    margin: 0;
+    position: fixed;
+    top: 10px;
+}
+
+.global-score {
+    right: 5px;
+    float: right;
+    margin: 0;
+    position: fixed;
+    top: 10px;
+}
+
+.global-header {
+    border-style: solid;
+    border-width: 0;
+    border-color: transparent;
+}
+
+.global-standard-text {
+    text-align: center;
+}
+
+#global-rank-values {
+    height: 90%;
+    width: 100%;
+    overflow-y: overlay;
+}
+
+#close-global-rank {
+    right:0;
+    position:absolute;
+    z-index: 3;
+}
+
+#close-global-rank {
+    right:0;
+    position:absolute;
+    z-index: 3;
+}
+
+.options-panel {
+    position:absolute;
+    width:100%;
+    height:10%;
+    top:2%;
+}

@@ -4,10 +4,10 @@ for (var i = 0; i < 10; i++) {
 	gameMatrix[i] = new Array(22);
 }
 
-var GameStates = {"IDLE":0, "PLAYING":1, "ENDED":2, "BUSY":3}
+var GameStates = {"IDLE":0, "PLAYING":1, "ENDED":2, "BUSY":3,"PAUSED":4}
 
 /**
-* Clear the matrix content
+* Clear the game matrix content
 */
 function clearMatrix() {
 	for(var i = 0; i < 10; i++) {
@@ -16,8 +16,21 @@ function clearMatrix() {
 			vMatrix.paintSquare(i,j,getShapeColor(null));
 		}
 	}
+	vMatrix.paintBG("#000000");
 }
 
+/**
+* Clear the preview matrix content
+*/
+function clearPreviewMatrix() {
+	for(var i = 0; i < 4; i++) {
+		for(var j = 0; j < 4; j++) {
+			nextPiece.paintSquare(i,j,getShapeColor(null));
+		}
+	}
+}
+
+var nextShape = null;
 var currentShape = null;
 /**
 * generate and spawn a random shape
@@ -30,8 +43,9 @@ function initializeShape() {
 	}
 
 	_checkForCompleteRows();
-
-	var shapeCoordinates = getRandomShape();
+	generateNextAndCurrentShape();
+	_updateNextPieceMatrixWithShape(getShapeCoordinates(nextShape), 0, 0, nextShape);
+	var shapeCoordinates = getShapeCoordinates(currentShape);
 	shapeCoordinates.forEach(function(coord) {
 		coord[0] += 3;
 	});
@@ -76,7 +90,7 @@ function _horizontalShiftShape(shapeCoordinates, shift) {
 	if(res == 1) {
 		_updateMatrixWithShape(shapeCoordinates, shift, 0, currentShape);		
 		for(var i = 0; i < shapeCoordinates.length; i++)
-			shapeCoordinates[i] = [shapeCoordinates[i][0]+shift,shapeCoordinates[i][1]];
+			shapeCoordinates[i] = [shapeCoordinates[i][0]+shift, shapeCoordinates[i][1]];
 		
 		return true;
 	}
@@ -92,20 +106,20 @@ function _forceHorizontalShiftShape(shapeCoordinates, shift) {
 
 /**
 * return true: no collisions, so shapeCoordinates are automatically updated
-* return false: collisions on the bottom with bottom wall or another piece
+* return false: collisions on the bottom with bottom wall or another piece, so no shifting operation has been done
 */
 function _verticalShiftShape(shapeCoordinates, shift) {
 	var newCoords = new Array(shapeCoordinates.length);
 	for(var i = 0; i < shapeCoordinates.length; i++)
 		newCoords[i] = [shapeCoordinates[i][0],shapeCoordinates[i][1] + shift];
 	var res = _checkSpaceAvailability(newCoords);
-	if(res == 1) {
+	if(res == 1) { //no collisions
 		_updateMatrixWithShape(shapeCoordinates, 0, shift, currentShape);		
 		for(var i = 0; i < shapeCoordinates.length; i++)
 			shapeCoordinates[i] = [shapeCoordinates[i][0],shapeCoordinates[i][1]+shift];
 		return res;
 	}
-	return res;
+	return res; //collision detected. no shifting
 }
 
 //ud
@@ -119,6 +133,20 @@ function _updateMatrixWithShape(shapeCoordinates, shiftX, shiftY, shapeType) {
 		vMatrix.paintSquare(shapeCoordinates[i][0]+shiftX, shapeCoordinates[i][1]+shiftY, getShapeColor(shapeType));
 	}
 	//updateUI();	
+}
+
+/**
+ * Draw next incoming piece to the small matrix (piece preview)
+ * @param {*} shapeCoordinates 
+ * @param {*} shiftX 
+ * @param {*} shiftY 
+ * @param {*} shapeType 
+ */
+function _updateNextPieceMatrixWithShape(shapeCoordinates, shiftX, shiftY, shapeType) {
+	clearPreviewMatrix();
+	for(var i = 0; i < shapeCoordinates.length; i++) {
+		nextPiece.paintSquare(shapeCoordinates[i][0]+shiftX, shapeCoordinates[i][1]+shiftY+1, getShapeColor(shapeType));
+	}
 }
 
 function _updateMatrixSubstituteShape(oldShape, newShape, shapeType) {
@@ -150,24 +178,28 @@ var skipped = 0;
 var speedOn = false;
 
 function shiftDown() {
-	if(speedOn || skipped % 10 == 0) {
-		if(currentShapeCoords) {		
-			var res = _verticalShiftShape(currentShapeCoords,1);
-			if(res == -3 || res == 0) {	
-				currentShapeCoords = initializeShape();
-				if(!currentShapeCoords) {
-					endGame();
+	if(gameStatus != GameStates.PAUSED) {
+		var levelCapped = level > 10?10 : level;
+		if((speedOn && skipped % 2 == 0) || skipped % (Math.floor(30/(levelCapped+1)))== 0) {
+			if(currentShapeCoords) {		
+				var res = _verticalShiftShape(currentShapeCoords,1);
+				if(res == -3 || res == 0) {	
+					increaseScore(16+level+lines);
+					currentShapeCoords = initializeShape();
+					if(!currentShapeCoords) {
+						endGame();
+					}
 				}
+			} else {
+				currentShapeCoords = initializeShape();
 			}
-		} else {
-			currentShapeCoords = initializeShape();
 		}
+		skipped++;
 	}
-	skipped++;
 }
 
 function rotate() {
-	if(gameStatus == GameStates.PLAYING) {
+	if(gameStatus == GameStates.PLAYING && currentShape != Shapes.SQUARE) {
 		var tempBlock = cloneBlock(currentShapeCoords);
 		var origin = currentShapeCoords[1];
 		for (i = 0, length = tempBlock.length; i < length; i++) {
@@ -246,58 +278,71 @@ function getCurrentSpeed() {
 }
 
 function cloneBlock(block) {
-	var newBlock = new Array(block.length);
-	for(var i = 0; i < block.length; i++) {
-		newBlock[i] = [block[i][0],block[i][1]];
+	if(block) {
+		var newBlock = new Array(block.length);
+		for(var i = 0; i < block.length; i++) {
+			newBlock[i] = [block[i][0],block[i][1]];
+		}
+		return newBlock;
 	}
-	return newBlock;
+	return null;
 }
 
 function _checkForCompleteRows() {
+	var audioLaunched = false;
 	for(var i = 0; i < gameMatrix[0].length; i++) {
 		var count = 0;
 		for(var j = 0; j < gameMatrix.length; j++) {
 			if(gameMatrix[j][i].val == 0) break;
 			count++;
 		}
-		if(count == gameMatrix.length) _moveEverythingAboveDownByOne(i);
+		if(count == gameMatrix.length) 
+		{
+			if(!audioLaunched) {
+				audioLaunched = true;
+				playLineSound();
+			}
+			_moveEverythingAboveDownByOne(i);
+			
+		}
 	}
 }
 
 function _moveEverythingAboveDownByOne(row) {
-	/*for(var i = row; i > 0; i--) {
-		for(var j = 0; j < gameMatrix.length; j++) {
-			gameMatrix[j][i] = gameMatrix[j][i-1];
-			//game
-		}
-	}*/
-
-	
 	for(var i = row; i > 0; i--) {
 		for(var j = 0; j < gameMatrix.length; j++) {
 			gameMatrix[j][i] = gameMatrix[j][i-1];
 			vMatrix.paintSquare(j,i, getShapeColor(gameMatrix[j][i].shape));
 		}
-		gameMatrix[j-1][i-2] = {"val":0, "shape":null};
-		vMatrix.paintSquare(j,i-1, getShapeColor(null));
+		/*gameMatrix[j-1][i-2] = {"val":0, "shape":null};
+		vMatrix.paintSquare(j,i-1, getShapeColor(null));*/
 	}
+	increaseLines();
+	increaseScore(100);
 }
 
 function endGame() {
 	clearInterval(gameInterval);
 	gameStatus = GameStates.BUSY;
 	endingPhaseInterval = setInterval(endingPhase, 50);
+	playLoseSound();
+	if(isUsernameSet())
+		addRecord({"name":saveGame.playerName, "score":""+score, "level":""+level});
 	console.log("Game Over");
 }
 
-var gameStatus = GameStates.IDLE;
+var lastGameStatus = GameStates.ENDED;
+var gameStatus = GameStates.ENDED;
 var gameInterval;
 
 function newGame() {
 	if(gameStatus != GameStates.PLAYING && gameStatus != GameStates.BUSY) {
+		resetData();
 		clearMatrix();
 		gameStatus = GameStates.PLAYING;
-		gameInterval = setInterval(shiftDown, 50);
+		gameInterval = setInterval(shiftDown, 20);
+		if(isMobile)
+			$(".mobile-events").attr('hidden', false);
 	}
 }
 
@@ -307,10 +352,19 @@ function endingPhase() {
 	if(endingPhaseRow < 0) {		
 		endingPhaseRow = 21;
 		gameStatus = GameStates.ENDED;
+		if(isMobile)
+			$(".mobile-events").attr('hidden', true);
 		clearInterval(endingPhaseInterval);
 	} else {
 		greyOutRow(endingPhaseRow--);
 	}
 }
 
-newGame();
+function waitForSpritesReady() {
+	if(currentSpriteLoaded >= imageCount) {
+		//newGame();
+		clearInterval(spriteReadyInterv);
+	}
+}
+
+var spriteReadyInterv = setInterval(waitForSpritesReady, 10);
