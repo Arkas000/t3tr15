@@ -357,6 +357,7 @@ function pause(val) {
 
 $("#close-global-rank").click(function() {hideGlobalRankUI();});
 $("#open-global-rank").click(function() {showGlobalRank();});
+$("#guide-line-button").click(function() {isGuideLinesActive = !isGuideLinesActive; });
 
 $("#pause").click(function(evt){pause()});
 

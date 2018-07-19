@@ -130,6 +130,9 @@ function _updateMatrixWithShape(shapeCoordinates, shiftX, shiftY, shapeType) {
 	}
 	for(var i = 0; i < shapeCoordinates.length; i++) {
 		gameMatrix[shapeCoordinates[i][0]+shiftX][shapeCoordinates[i][1]+shiftY] = {"val":2,"shape":shapeType};
+	}
+	updateMatrixWithGuideLines(shiftX, shiftY);
+	for(var i = 0; i < shapeCoordinates.length; i++) {
 		vMatrix.paintSquare(shapeCoordinates[i][0]+shiftX, shapeCoordinates[i][1]+shiftY, getShapeColor(shapeType));
 	}
 	//updateUI();	
@@ -285,7 +288,7 @@ function cloneBlock(block) {
 		}
 		return newBlock;
 	}
-	return null;
+	return [];
 }
 
 function _checkForCompleteRows() {
